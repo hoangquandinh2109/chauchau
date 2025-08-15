@@ -11,7 +11,7 @@ const renderPage = (page) => {
 
   if (page === 'home') {
     content.innerHTML = `
-      <h1>Welcome to Home Page</h1>
+      <h1>Welcome to Chau Chau Page</h1>
       <p>Click on the menu to navigate to other pages.</p>
     `;
   } else if (page === 'page1') {
