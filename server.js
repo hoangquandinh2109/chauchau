@@ -2,6 +2,9 @@ import express from 'express';
 import path from 'path';
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // API endpoints
 app.get('/api/data1', (req, res) => {
   res.json({ message: 'This is API 1' });
