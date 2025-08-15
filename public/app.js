@@ -18,7 +18,7 @@ const renderPage = (page) => {
     content.innerHTML = `<h1>Page 1</h1><button onclick="callApi1()">Call API 1</button><div id="api1-response"></div>`;
   } else if (page === 'page2') {
     content.innerHTML = `<h1>Page 2</h1><button onclick="callApi2()">Call API 2</button><div id="api2-response"></div>`;
-  } else if (page === 'menu') {
+  } else if (page === 'meal') {
   const today = new Date().toLocaleDateString('vi-VN', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
   });
