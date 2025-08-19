@@ -1,0 +1,43 @@
+{
+  "users": [
+    {
+      "username": "ethan",
+      "password": "123"
+    },
+    {
+      "username": "mark",
+      "password": "123"
+    },
+    {
+      "username": "zara",
+      "password": "123"
+    }
+  ],
+  "bills": [
+    {
+      "id": "bill-1",
+      "title": "BBQ party",
+      "description": "Meat + drinks",
+      "owner": "ethan",
+      "transferInfo": {
+        "bank": "RBC",
+        "account": "123-456-789",
+        "note": "e-transfer to ethan@example.com"
+      },
+      "participants": [
+        {
+          "username": "ethan",
+          "paid": false
+        },
+        {
+          "username": "mark",
+          "paid": false
+        },
+        {
+          "username": "zara",
+          "paid": false
+        }
+      ]
+    }
+  ]
+}
