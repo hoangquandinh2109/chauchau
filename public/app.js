@@ -40,7 +40,6 @@ function Login() {
         <input id="p" class="input" placeholder="Password" type="password" />
         <button id="login" class="btn primary">Login</button>
       </div>
-      <p class="small">Demo users: ethan / mark / zara (password 123)</p>
     </div>
   `;
 
@@ -69,7 +68,7 @@ async function BillsList() {
 
 function BillCard(bill, user) {
   const owner = bill.owner === user.username ? '<span class="pill">You are the owner</span>' : '';
-  const transfer = bill.transferInfo || {};
+  const transferInfo = bill.transferInfo || '';
   const me = bill.participants.find(p => p.username === user.username);
   const paidLabel = me?.paid ? 'Paid' : 'Mark as Paid';
   const paidBtnClass = me?.paid ? 'btn' : 'btn primary';
@@ -79,7 +78,7 @@ function BillCard(bill, user) {
       <div class="title">${bill.title} ${owner}</div>
       <div class="small">By ${bill.owner}</div>
       ${bill.description ? `<p>${bill.description}</p>` : ''}
-      <div class="small">Transfer: ${transfer.bank || ''} ${transfer.account || ''} ${transfer.note ? '— ' + transfer.note : ''}</div>
+      <div class="small">Transfer: ${transferInfo}</div>
       <hr />
       <div>
         ${bill.participants.map(p => `
@@ -124,19 +123,8 @@ function NewBill() {
         <label>Description</label>
         <input id="desc" class="input" placeholder="Optional description" />
 
-        <div class="row">
-          <div>
-            <label>Bank</label>
-            <input id="bank" class="input" placeholder="Bank name" />
-          </div>
-          <div>
-            <label>Account</label>
-            <input id="account" class="input" placeholder="Account / number" />
-          </div>
-        </div>
-
-        <label>Note</label>
-        <input id="note" class="input" placeholder="e.g., e-transfer email" />
+        <label>Transfer Info</label>
+        <input id="transferInfo" class="input" placeholder="e.g., e-transfer email" />
 
         <label>Participants* (comma separated usernames)</label>
         <input id="parts" class="input" placeholder="ethan, mark, zara" />
@@ -149,15 +137,13 @@ function NewBill() {
   document.getElementById('create').onclick = async () => {
     const title = document.getElementById('title').value.trim();
     const description = document.getElementById('desc').value.trim();
-    const bank = document.getElementById('bank').value.trim();
-    const account = document.getElementById('account').value.trim();
-    const note = document.getElementById('note').value.trim();
+    const transferInfo = document.getElementById('transferInfo').value.trim();
     const participants = document.getElementById('parts').value.split(',').map(x => x.trim()).filter(Boolean);
 
     if (!title || participants.length === 0) return alert('Title and at least one participant required');
 
     try {
-      await Bills.create({ title, description, transferInfo: { bank, account, note }, participants });
+      await Bills.create({ title, description, transferInfo, participants });
       navigate('/');
     } catch (e) {
       alert(e.message);

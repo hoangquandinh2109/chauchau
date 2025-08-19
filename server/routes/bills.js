@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { withDB } from '../db/db.js';
+import crypto from 'crypto';
 
 const router = Router();
 
@@ -28,7 +29,7 @@ router.post('/', async (req, res) => {
     title,
     description: description || '',
     owner: req.session.user.username,
-    transferInfo: transferInfo || {},
+    transferInfo: transferInfo || '',
     participants: participants.map(p => ({ username: p, paid: p === req.session.user.username ? true : false }))
   };
 

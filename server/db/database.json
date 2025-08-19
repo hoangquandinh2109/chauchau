@@ -15,15 +15,32 @@
   ],
   "bills": [
     {
+      "id": "bill-073ee630-d43c-44d0-a871-c8f59379af78",
+      "title": "súhi",
+      "description": "kdlkl",
+      "owner": "ethan",
+      "transferInfo": "kdlksl@mksl.dklk",
+      "participants": [
+        {
+          "username": "ethan",
+          "paid": true
+        },
+        {
+          "username": "minh",
+          "paid": false
+        },
+        {
+          "username": "vuong",
+          "paid": false
+        }
+      ]
+    },
+    {
       "id": "bill-1",
       "title": "BBQ party",
       "description": "Meat + drinks",
       "owner": "ethan",
-      "transferInfo": {
-        "bank": "RBC",
-        "account": "123-456-789",
-        "note": "e-transfer to ethan@example.com"
-      },
+      "transferInfo": "e-transfer to ethan@example.com",
       "participants": [
         {
           "username": "ethan",
