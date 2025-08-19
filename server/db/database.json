@@ -2,15 +2,27 @@
   "users": [
     {
       "username": "ethan",
-      "password": "123"
+      "password": "chauchau"
     },
     {
-      "username": "mark",
-      "password": "123"
+      "username": "himie",
+      "password": "chauchau"
     },
     {
-      "username": "zara",
-      "password": "123"
+      "username": "trimie",
+      "password": "chauchau"
+    },
+    {
+      "username": "quimie",
+      "password": "chauchau"
+    },
+    {
+      "username": "haovuong",
+      "password": "chauchau"
+    },
+    {
+      "username": "banhbong",
+      "password": "chauchau"
     }
   ],
   "bills": [
@@ -26,11 +38,11 @@
           "paid": true
         },
         {
-          "username": "minh",
+          "username": "himie",
           "paid": false
         },
         {
-          "username": "vuong",
+          "username": "trimie",
           "paid": false
         }
       ]
@@ -47,11 +59,11 @@
           "paid": false
         },
         {
-          "username": "mark",
+          "username": "himie",
           "paid": false
         },
         {
-          "username": "zara",
+          "username": "trimie",
           "paid": false
         }
       ]
