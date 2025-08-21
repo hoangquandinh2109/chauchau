@@ -18,7 +18,9 @@ export const Auth = {
 
 export const Bills = {
   list: () => api('/bills'),
+  find: (id) => api(`/bills/${id}`),
   create: (payload) => api('/bills', { method: 'POST', body: payload }),
+  edit: (billId, payload) => api(`/bills/${billId}`, { method: 'PUT', body: payload }),
   togglePaid: (billId) => api(`/bills/${billId}/togglePaid`, { method: 'PUT' }),
   myUnpaid: () => api('/bills/unpaid/me'),
   remove: (billId) => api(`/bills/${billId}`, { method: 'DELETE' }),

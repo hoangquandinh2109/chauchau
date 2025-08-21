@@ -50,7 +50,7 @@ export async function NewBill() {
             <label>
               <input type="checkbox" value="${u._id}" />
               ${u.name} (@${u.username})
-            </label>
+            </label><br>
           `).join('')}
         </div>
 
@@ -110,5 +110,28 @@ function attachBillHandlers() {
       }
     };
   });
+
+  document.querySelectorAll('.card .edit').forEach(btn => {
+  btn.onclick = async (e) => {
+    const card = e.target.closest('.card');
+    const id = card.getAttribute('data-id');
+    const bill = await Bills.find(id);
+
+    // show prompt form (hoặc modal) prefill info
+    const title = prompt('Title', bill.title);
+    const amount = parseFloat(prompt('Amount', bill.amount));
+    const description = prompt('Description', bill.description);
+    const transferInfo = prompt('Transfer Info', bill.transferInfo);
+
+    if (!title || isNaN(amount)) return alert('Title and amount required');
+
+    const participants = bill.participants.map(p => p.user._id); // giữ nguyên cho đơn giản
+
+    const updatedBill = await Bills.edit(id, { title, amount, description, transferInfo, participants });
+    const { user } = await Auth.me();
+    card.outerHTML = BillCard(updatedBill, user);
+    attachBillHandlers();
+  };
+});
 }
 

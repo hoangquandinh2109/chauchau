@@ -24,7 +24,10 @@ export function BillCard(bill, user) {
           </div>
         `).join('')}
       </div>
-      ${bill.owner._id === user.id ? `<button class="delete btn danger">Delete</button>` : ''}
+      ${bill.owner._id === user.id ? `
+        <button class="edit btn warning">Edit</button>
+        <button class="delete btn danger">Delete</button>
+      ` : ''}
     </div>
   `;
 }
