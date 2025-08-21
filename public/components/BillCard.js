@@ -18,7 +18,7 @@ export function BillCard(bill, user) {
       <div>
         ${bill.participants.map(p => `
           <div class="participant ${p.paid ? 'paid' : ''}">
-            <span>@${p.user.name}</span>
+            <span>@${p.user.username}</span>
             <span class="status">${p.paid ? `has paid $${amountPerPerson}` : 'not yet'}</span>
             ${p.user._id === user.id ? `<button class="toggle btn btn-small ${paidBtnClass}">${paidLabel}</button>` : ''}
           </div>
