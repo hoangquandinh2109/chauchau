@@ -10,9 +10,10 @@ export async function api(path, opts = {}) {
 }
 
 export const Auth = {
-  me: () => api('/me'),
-  login: (username, password) => api('/login', { method: 'POST', body: { username, password } }),
-  logout: () => api('/logout', { method: 'POST' }),
+  me: () => api('/auth/me'),
+  login: (username, password) => api('/auth/login', { method: 'POST', body: { username, password } }),
+  signup: (username, password, name) => api('/auth/signup', { method: 'POST', body: { username, password, name } }),
+  logout: () => api('/auth/logout', { method: 'POST' }),
 };
 
 export const Bills = {
@@ -20,4 +21,8 @@ export const Bills = {
   create: (payload) => api('/bills', { method: 'POST', body: payload }),
   togglePaid: (billId) => api(`/bills/${billId}/togglePaid`, { method: 'PUT' }),
   myUnpaid: () => api('/bills/unpaid/me'),
+};
+
+export const Participants = {
+  list: () => api('/participants'),
 };

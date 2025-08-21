@@ -1,69 +1,80 @@
 import { Router } from 'express';
-import { withDB } from '../db/db.js';
-import crypto from 'crypto';
+import Bill from '../models/Bill.js';
+import mongoose from 'mongoose';
 
 const router = Router();
 
-// Auth middleware for bills APIs
 router.use((req, res, next) => {
-  if (!req.session.user) return res.status(401).json({ error: 'Not authenticated' });
+  if (!req.session.user)
+    return res.status(401).json({ error: 'Not authenticated' });
   next();
 });
 
 // Get all bills
 router.get('/', async (req, res) => {
-  const bills = await withDB(async (db) => db.bills);
+  const bills = await Bill.find()
+    .populate('participants.user', 'username name')
+    .populate('owner', 'username name');
   res.json(bills);
 });
 
 // Create a bill
 router.post('/', async (req, res) => {
-  const { title, description, transferInfo, participants } = req.body;
-  if (!title || !participants || !Array.isArray(participants) || participants.length === 0) {
-    return res.status(400).json({ error: 'Title and participants are required' });
+  const { title, description, transferInfo, participants, amount } = req.body;
+  if (!title || !participants?.length || !amount) {
+    return res
+      .status(400)
+      .json({ error: 'Title, amount and participants are required' });
   }
 
-  const id = `bill-${crypto.randomUUID()}`;
-  const newBill = {
-    id,
+  const newBill = new Bill({
     title,
     description: description || '',
-    owner: req.session.user.username,
+    amount,
+    owner: req.session.user.id,
     transferInfo: transferInfo || '',
-    participants: participants.map(p => ({ username: p, paid: p === req.session.user.username ? true : false }))
-  };
-
-  const created = await withDB(async (db) => {
-    db.bills.unshift(newBill);
-    return { __write: true, data: db, returnValue: newBill };
+    participants: participants.map((p) => ({
+      user: p,
+      paid: p === req.session.user.id,
+    })),
   });
 
-  res.status(201).json(created);
+  await newBill.save();
+  res.status(201).json(newBill);
 });
 
-// Toggle paid/unpaid for the logged-in user on a bill
+// Toggle paid/unpaid
 router.put('/:id/togglePaid', async (req, res) => {
-  const billId = req.params.id;
-  const me = req.session.user.username;
+  const myid = req.session.user.id;
+  const bill = await Bill.findById(req.params.id);
+  if (!bill) return res.status(404).json({ error: 'Bill not found' });
 
-  const updated = await withDB(async (db) => {
-    const bill = db.bills.find(b => b.id === billId);
-    if (!bill) return null;
-    const participant = bill.participants.find(p => p.username === me);
-    if (!participant) return { error: 'You are not a participant' };
-    participant.paid = !participant.paid;
-    return { __write: true, data: db, returnValue: bill };
-  });
+  const participant = bill.participants.find((p) => p.user.toString() === myid);
+  if (!participant)
+    return res.status(400).json({ error: 'You are not a participant' });
 
-  if (!updated) return res.status(404).json({ error: 'Bill not found' });
-  if (updated.error) return res.status(400).json(updated);
-  res.json(updated);
+  participant.paid = !participant.paid;
+  await bill.save();
+
+  let populatedBill = await bill.populate('participants.user', 'username name')
+  populatedBill = await bill.populate('owner', 'username name');
+
+  res.json(populatedBill);
 });
 
 // Get unpaid bills for me
 router.get('/unpaid/me', async (req, res) => {
-  const me = req.session.user.username;
-  const list = await withDB(async (db) => db.bills.filter(b => b.participants.some(p => p.username === me && !p.paid)));
+  const myOid = mongoose.Types.ObjectId.createFromHexString(
+    req.session.user.id,
+  );
+  const list = await Bill.find({
+    participants: {
+      $elemMatch: { user: myOid, paid: false },
+    },
+  })
+    .populate('participants.user', 'username name')
+    .populate('owner', 'username name');
+
   res.json(list);
 });
 

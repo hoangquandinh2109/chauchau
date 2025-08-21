@@ -1,7 +1,15 @@
-// Super-light SPA router using hash routes
-export const routes = {};
+import { Login } from './views/auth.js';
+import { BillsList, MyUnpaid, NewBill } from './views/bills.js';
+import { Logout } from './views/logout.js';
 
-export function route(path, handler) { routes[path] = handler; }
+const routes = {
+  '/login': Login,
+  '/': BillsList,
+  '/new': NewBill,
+  '/my-unpaid': MyUnpaid,
+  '/logout': Logout,
+  '/404': () => document.getElementById('app').innerHTML = '<div class="card">Not found</div>',
+};
 
 export function navigate(path) {
   if (location.hash !== `#${path}`) location.hash = `#${path}`;
