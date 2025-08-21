@@ -78,4 +78,20 @@ router.get('/unpaid/me', async (req, res) => {
   res.json(list);
 });
 
+router.delete('/:id', async (req, res) => {
+  const myid = req.session.user.id;
+  const bill = await Bill.findById(req.params.id);
+
+  if (!bill) return res.status(404).json({ error: 'Bill not found' });
+
+  // Chỉ owner mới có quyền xóa
+  if (bill.owner.toString() !== myid) {
+    return res.status(403).json({ error: 'Only the owner can delete this bill' });
+  }
+
+  await bill.deleteOne();
+  res.json({ ok: true, message: 'Bill deleted successfully' });
+});
+
+
 export default router;

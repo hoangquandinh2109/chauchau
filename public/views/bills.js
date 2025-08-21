@@ -1,5 +1,6 @@
 import { Auth, Bills, Participants } from '../api.js';
 import { BillCard } from '../components/BillCard.js';
+import { navigate } from '../router.js';
 import { requireAuth } from './requireAuth.js';
 
 const app = document.getElementById('app');
@@ -79,6 +80,7 @@ export async function NewBill() {
 }
 
 function attachBillHandlers() {
+  // Toggle paid
   document.querySelectorAll('.card .toggle').forEach(btn => {
     btn.onclick = async (e) => {
       const card = e.target.closest('.card');
@@ -93,4 +95,20 @@ function attachBillHandlers() {
       }
     };
   });
+
+  // Delete bill
+  document.querySelectorAll('.card .delete').forEach(btn => {
+    btn.onclick = async (e) => {
+      if (!confirm('Are you sure you want to delete this bill?')) return;
+      const card = e.target.closest('.card');
+      const id = card.getAttribute('data-id');
+      try {
+        await Bills.remove(id);
+        navigate('/');
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+  });
 }
+

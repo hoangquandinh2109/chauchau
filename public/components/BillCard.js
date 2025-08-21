@@ -1,5 +1,5 @@
 export function BillCard(bill, user) {
-  const owner = bill.owner === user.username ? '<span class="pill">You are the owner</span>' : '';
+  const owner = bill.owner._id === user.id ? '<span class="pill">You are the owner</span>' : '';
   const transferInfo = bill.transferInfo || '';
   const me = bill.participants.find(p => p.user._id === user.id);
   const paidLabel = me?.paid ? 'Paid' : 'Mark as Paid';
@@ -9,7 +9,7 @@ export function BillCard(bill, user) {
   return `
     <div class="card" data-id="${bill._id}">
       <div class="title">${bill.title} ${owner}</div>
-      <div class="small">By ${bill.owner.name}</div>
+      <div class="small">By ${bill.owner.name} (@${bill.owner.username})</div>
       <div class="small">Amount: $${bill.amount.toFixed(2)}</div>
       <div class="small">Each owes: $${amountPerPerson}</div>
       ${bill.description ? `<p>${bill.description}</p>` : ''}
@@ -24,6 +24,7 @@ export function BillCard(bill, user) {
           </div>
         `).join('')}
       </div>
+      ${bill.owner._id === user.id ? `<button class="delete btn danger">Delete</button>` : ''}
     </div>
   `;
 }

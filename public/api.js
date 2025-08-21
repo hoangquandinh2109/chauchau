@@ -21,6 +21,7 @@ export const Bills = {
   create: (payload) => api('/bills', { method: 'POST', body: payload }),
   togglePaid: (billId) => api(`/bills/${billId}/togglePaid`, { method: 'PUT' }),
   myUnpaid: () => api('/bills/unpaid/me'),
+  remove: (billId) => api(`/bills/${billId}`, { method: 'DELETE' }),
 };
 
 export const Participants = {
